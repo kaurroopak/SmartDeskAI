@@ -1,0 +1,41 @@
+ticket_text,category,resolution
+Cannot log in to my account even after resetting password,Login Issue,Clear browser cache and cookies then try again. If issue persists reset password via admin portal.
+VPN keeps disconnecting every few minutes,Network Issue,Reinstall VPN client and update to latest version. Check firewall settings.
+Outlook is not opening and shows error 0x800CCC0F,Application Error,Repair Office installation via Control Panel. Run outlook /safe to diagnose add-ins.
+Need access to the HR portal for new employee onboarding,Access Issue,Submit access request through ServiceNow. Manager approval required within 48 hours.
+Laptop keyboard stopped working suddenly,Hardware Issue,Check keyboard driver in Device Manager. If physical damage suspected raise hardware replacement request.
+Single Sign-On not working for Salesforce,Login Issue,Clear SSO tokens and log out of all sessions. Re-authenticate via corporate identity provider.
+Internet very slow in conference room B,Network Issue,Run network diagnostic. Check if bandwidth is being consumed by background updates.
+Excel keeps crashing when opening large files,Application Error,Disable hardware acceleration in Excel options. Update Office to latest patch.
+Request to add user to the Finance SharePoint site,Access Issue,Verify requester identity and manager approval. Add via Azure AD groups.
+Mouse pointer is frozen and unresponsive,Hardware Issue,Try connecting mouse to different USB port. Reinstall HID drivers from Device Manager.
+Password expired and cannot reset through self-service portal,Login Issue,IT admin will manually reset password. Verify identity via employee ID.
+Cannot connect to company WiFi after recent laptop update,Network Issue,Forget the network and reconnect. Update wireless adapter driver.
+Adobe Acrobat crashes when printing PDF files,Application Error,Update Adobe Acrobat to latest version. Reset printer preferences in Acrobat settings.
+Need read access to the shared Finance drive,Access Issue,Manager must submit access form. Access provisioned within 24 hours after approval.
+Second monitor not detected after docking station connection,Hardware Issue,Update display drivers. Try different DisplayPort cable and dock firmware update.
+Two-factor authentication code not being received,Login Issue,Check spam folder for SMS. Verify phone number registered in profile is correct.
+Cannot access internal servers from home via VPN,Network Issue,Check VPN split tunneling settings. Ensure correct VPN profile is selected.
+Teams application shows black screen on startup,Application Error,Clear Teams cache folder at AppData/Roaming/Microsoft/Teams. Reinstall if needed.
+Request admin rights on local machine for software installation,Access Issue,Submit privileged access request. Business justification required. Security review takes 3 days.
+Printer not found on the network after moving to new desk,Hardware Issue,Re-add printer using new IP address. Contact facilities for network port activation.
+Account locked after multiple failed login attempts,Login Issue,Account unlocked after 30 minutes or IT admin can unlock immediately via AD.
+Slow file transfers to NAS storage,Network Issue,Check network cable connection. Run iPerf test to measure actual throughput.
+SAP transaction SM30 throws runtime error,Application Error,Clear SAP buffers and restart application. If persists contact SAP team for basis support.
+Need access to production database for reporting,Access Issue,DBA team review required. Approved requests provisioned with read-only access.
+Docking station USB ports not working,Hardware Issue,Update dock firmware and USB drivers. Try different power adapter for dock.
+Cannot sign in to Office 365 after password change,Login Issue,Wait 15 minutes for directory sync. Clear cached credentials in Windows Credential Manager.
+Packet loss on video calls in the open office area,Network Issue,Switch to wired ethernet connection. Check for wireless interference on 2.4GHz band.
+PowerBI desktop crashes on launch,Application Error,Uninstall and reinstall from Software Center. Check for conflicting Visual C++ redistributables.
+Request to create new distribution list for project team,Access Issue,Submit request via IT portal with list of members. Created within one business day.
+Laptop fan very loud and device running hot,Hardware Issue,Clean vents with compressed air. Check Task Manager for high CPU processes. Consider thermal paste replacement.
+Cannot log in after Active Directory migration,Login Issue,Use new domain prefix with username. Update saved credentials in all applications.
+Network drive disconnecting after sleep mode,Network Issue,Disable sleep mode for network adapters in Device Manager power settings.
+Zoom video freezes during screen sharing,Application Error,Lower screen share resolution in Zoom settings. Disable GPU acceleration.
+Need temporary access to colleague account while on leave,Access Issue,Delegation access must be approved by manager and HR. Never share passwords directly.
+Laptop screen has dead pixels in bottom corner,Hardware Issue,Document issue with photo evidence. Submit hardware warranty claim if under 3 years old.
+Biometric login not recognizing fingerprint,Login Issue,Re-enroll fingerprint in Windows Hello settings. Clean sensor with dry cloth.
+Cannot access internet from wired connection,Network Issue,Release and renew IP address via cmd. Check DHCP lease in network settings.
+Outlook calendar not syncing with mobile device,Application Error,Remove and re-add corporate email account on mobile. Ensure ActiveSync policy is applied.
+Request access to AWS production environment,Access Issue,Security review and manager approval mandatory. MFA enrollment required before access granted.
+Keyboard keys sticking and some not registering,Hardware Issue,Clean keyboard with compressed air. If under warranty submit replacement request.
