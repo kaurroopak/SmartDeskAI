@@ -14,10 +14,13 @@ matplotlib.use('Agg')
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, BASE_DIR)
 
+#from SmartDeskAI.utils import confidence
 from model.train_model import load_model
 from model.similarity import get_similar_tickets
-from utils.confidence import compute_confidence, get_confidence_label
+from utils.confidence import get_confidence_label
 from utils.decision import decide, get_priority
+
+CONF_THRESHOLD = 0.55
 
 # ── page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
@@ -224,8 +227,35 @@ def analyze_ticket(text: str) -> dict:
     else:
         category = predicted_category
 
-    confidence = compute_confidence(sim_score, proba)
+    confidence = (0.7 * sim_score) + (0.3 * proba)
+    # Boost confidence if strong similarity match
+    if sim_score > 0.6:
+        confidence += 0.15
+    # Clamp value
+    confidence = min(confidence, 1.0)
+    
+    CRITICAL_KEYWORDS = ["production", "down", "outage", "critical", "security", "data loss"]
+    is_critical = any(word in text.lower() for word in CRITICAL_KEYWORDS)
+
     decision = decide(confidence, text)
+
+    # Force critical override
+    if is_critical:
+        decision["auto"] = False
+        decision["status"] = "Needs Human Review"
+        decision["is_critical"] = True
+        decision["reason"] = "Critical issue requires human attention"
+
+    else:
+        if confidence >= CONF_THRESHOLD:
+            decision["auto"] = True
+            decision["status"] = "Auto-Resolved"
+            decision["reason"] = f"High confidence (≥ {int(CONF_THRESHOLD*100)}%)"
+        else:
+            decision["auto"] = False
+            decision["status"] = "Needs Human Review"
+            decision["reason"] = f"Confidence below threshold ({int(CONF_THRESHOLD*100)}%)"
+        
     priority = get_priority(category)
     resolution = similar[0]['resolution'] if similar else "No resolution found."
 
@@ -254,7 +284,12 @@ def analyze_ticket(text: str) -> dict:
 
 def conf_bar_html(conf: float) -> str:
     pct = int(conf * 100)
-    color = "#22c55e" if conf >= 0.8 else "#f59e0b" if conf >= 0.5 else "#ef4444"
+    if conf >= CONF_THRESHOLD:
+        color = "#22c55e"
+    elif conf >= 0.4:
+        color = "#f59e0b"
+    else:
+        color = "#ef4444"
     return f"""
     <div class="conf-bar-wrap">
       <div class="conf-bar-fill" style="width:{pct}%;background:{color};"></div>
@@ -394,6 +429,7 @@ elif page == "New Ticket":
             st.markdown(f"**Similarity Score:** {ticket['similarity_score']:.0%}")
             st.markdown(f"**Classification Prob:** {ticket['classification_prob']:.0%}")
             st.markdown(status_badge(ticket['status'], ticket['is_critical']), unsafe_allow_html=True)
+            st.caption(f"Confidence threshold: {int(CONF_THRESHOLD*100)}% (calibrated for MVP)")
 
         st.markdown("---")
 
@@ -404,14 +440,15 @@ elif page == "New Ticket":
         else:
             st.warning(f"**{ticket['status']}** — {ticket['reason']}")
             st.markdown(f"**Suggested Resolution:**\n\n> {ticket['resolution']}")
-        st.info("This ticket has been forwarded to the support team for review.")
+        if not ticket['auto']:
+            st.info("This ticket has been forwarded to the support team for review.")
 
         # Explainability
         st.markdown("---")
         st.subheader("Explainability — Top Similar Tickets")
         for i, sim in enumerate(ticket['similar_tickets'], 1):
             pct = int(sim['similarity'] * 100)
-            color = "#22c55e" if sim['similarity'] >= 0.8 else "#f59e0b" if sim['similarity'] >= 0.5 else "#94a3b8"
+            color = "#22c55e" if sim['similarity'] >= CONF_THRESHOLD else "#f59e0b" if sim['similarity'] >= 0.5 else "#94a3b8"
             st.markdown(f"""
             <div class="ticket-card">
               <h4>#{i} — {sim['ticket_text']}</h4>
@@ -580,7 +617,7 @@ elif page == "Analytics":
             confs = [t['confidence'] for t in tickets]
             fig2, ax2 = plt.subplots(figsize=(5, 3.5))
             ax2.hist(confs, bins=10, color="#22c55e", edgecolor="white", range=(0, 1))
-            ax2.axvline(0.8, color="#ef4444", linestyle="--", label="Threshold (0.8)")
+            ax2.axvline(CONF_THRESHOLD, color="#ef4444", linestyle="--", label=f"Threshold ({int(CONF_THRESHOLD*100)}%)")
             ax2.set_xlabel("Confidence Score")
             ax2.set_ylabel("Frequency")
             ax2.legend()
